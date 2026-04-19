@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRMA Africa — Dependency Substitution, Not Diversification · Julius Holzner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'IBM Plex Sans',sans-serif;background:#e4e4de;color:#0f0f0d;font-size:15px;line-height:1.6;scroll-behavior:smooth}
+
+header{background:#1a3a5c;padding:0 48px;display:flex;align-items:stretch;justify-content:space-between;border-bottom:3px solid #0d2a45}
+.hdr-left{padding:18px 0;border-right:1px solid rgba(255,255,255,0.12);padding-right:28px;margin-right:28px}
+.hdr-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:#fff;letter-spacing:.02em}
+.hdr-affil{font-size:10px;color:rgba(255,255,255,0.5);margin-top:3px;font-weight:300;letter-spacing:.05em;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:20px}
+.hdr-tag{font-size:9px;color:rgba(255,255,255,0.4);font-weight:300;letter-spacing:.1em;text-transform:uppercase}
+.hdr-tag span{display:block;font-size:11px;color:rgba(255,255,255,0.7);font-weight:400;letter-spacing:.01em;text-transform:none;margin-top:2px}
+@media(max-width:680px){header{padding:0 20px}.hdr-right{display:none}}
+
+.hero{background:#1a3a5c;padding:52px 48px 52px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#b8940a 0%,#e8c84a 35%,#c8a82a 65%,#b8940a 100%)}
+.hero-eyebrow{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;font-family:'IBM Plex Mono',monospace}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:500;line-height:1.22;color:#fff;max-width:760px;margin-bottom:22px}
+.hero h1 em{color:#e8c84a;font-style:normal}
+.hero-sub{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.8;max-width:600px;margin-bottom:30px;font-weight:300}
+.hero-meta{display:flex;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.1);padding-top:18px;gap:0}
+.meta-chip{font-size:10px;color:rgba(255,255,255,0.4);padding:0 20px 0 0;margin-right:20px;border-right:1px solid rgba(255,255,255,0.1);font-weight:300}
+.meta-chip:last-child{border-right:none}
+.meta-chip strong{color:rgba(255,255,255,0.8);font-weight:500;display:block;margin-bottom:2px;font-size:11px}
+@media(max-width:680px){.hero{padding:36px 20px 44px}.hero h1{font-size:24px}}
+
+.sticky-nav{position:sticky;top:0;z-index:100;background:#1a3a5c;border-bottom:1px solid rgba(255,255,255,0.1);padding:0 48px;display:flex;gap:0;overflow-x:auto}
+.nav-item{font-size:11px;color:rgba(255,255,255,0.5);padding:12px 16px;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;text-decoration:none;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em}
+.nav-item:hover{color:rgba(255,255,255,0.85)}
+@media(max-width:680px){.sticky-nav{padding:0 8px}}
+
+.page{max-width:960px;margin:0 auto;padding:36px 48px 80px}
+@media(max-width:680px){.page{padding:20px 16px 60px}}
+
+.card{background:#fafaf7;border:1px solid #d8d8d2;border-radius:3px;padding:30px 34px;margin-bottom:20px}
+.card-label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#9a9a93;font-family:'IBM Plex Mono',monospace;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.card-label::after{content:'';flex:1;height:1px;background:#d8d8d2}
+.card h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:#0f0f0d;margin-bottom:16px;line-height:1.3}
+.card p{font-size:13px;color:#3a3a36;line-height:1.85;margin-bottom:14px}
+.card p:last-child{margin-bottom:0}
+.card p em{font-style:italic;color:#1a3a5c}
+
+.thesis{border-left:3px solid #1a3a5c;padding:16px 22px;margin:20px 0;background:#eef3fb;border-radius:0 3px 3px 0;font-family:'Playfair Display',serif;font-size:15px;color:#1a3a5c;line-height:1.65;font-style:italic}
+
+.sources{margin-top:18px;padding-top:14px;border-top:1px solid #e8e8e3}
+.sources-label{font-size:9px;color:#9a9a93;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:8px}
+.source-links{display:flex;flex-wrap:wrap;gap:6px}
+.src-link{font-size:10px;color:#1a3a5c;background:#eef3fb;padding:3px 10px;border-radius:2px;text-decoration:none;font-family:'IBM Plex Mono',monospace;border:1px solid #c4d8f0;transition:all .15s}
+.src-link:hover{background:#1a3a5c;color:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:16px}
+.stat{background:#f2f2ee;border:1px solid #d8d8d2;border-radius:3px;padding:14px 16px}
+.stat-label{font-size:9px;color:#9a9a93;letter-spacing:.05em;margin-bottom:6px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase}
+.stat-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;color:#0f0f0d;margin-bottom:2px}
+.stat-val.danger{color:#8b2020}
+.stat-sub{font-size:10px;color:#6b6b65;line-height:1.4}
+
+.widget{background:#fafaf7;border:1px solid #d8d8d2;border-radius:3px;margin-bottom:20px;overflow:hidden}
+.widget-head{padding:22px 34px 0}
+.widget-head h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:#0f0f0d;margin-bottom:16px}
+.tabs{display:flex;border-bottom:1px solid #d8d8d2;padding:0 34px;overflow-x:auto}
+.tab{padding:10px 16px;font-size:11px;cursor:pointer;color:#6b6b65;background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:color .15s;letter-spacing:.02em}
+.tab:hover{color:#0f0f0d}
+.tab.on{color:#1a3a5c;border-bottom-color:#1a3a5c;font-weight:500}
+.panel{display:none;padding:22px 34px 28px}
+.panel.on{display:block}
+.panel-label{font-size:9px;color:#9a9a93;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:14px}
+
+/* RISK TIMELINE */
+.risk-widget{background:#fafaf7;border:1px solid #d8d8d2;border-radius:3px;margin-bottom:20px;overflow:hidden}
+.risk-head{background:#1a3a5c;padding:24px 34px}
+.risk-head h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:#fff;margin-bottom:6px}
+.risk-head p{font-size:12px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.6;max-width:600px}
+.risk-tabs{display:flex;border-bottom:1px solid #d8d8d2;padding:0 34px;background:#fafaf7;overflow-x:auto}
+.risk-tab{padding:10px 16px;font-size:11px;cursor:pointer;color:#6b6b65;background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:color .15s;letter-spacing:.02em}
+.risk-tab:hover{color:#0f0f0d}
+.risk-tab.on{color:#1a3a5c;border-bottom-color:#e8c84a;font-weight:500}
+.risk-panel{display:none;padding:22px 34px 28px}
+.risk-panel.on{display:block}
+.risk-horizon-label{font-size:9px;color:#9a9a93;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.risk-horizon-label::after{content:'';flex:1;height:1px;background:#e8e8e3}
+.risk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:16px}
+.rcard{background:#fafaf7;border:1px solid #d8d8d2;border-radius:3px;padding:14px 16px;cursor:pointer;transition:all .15s;border-top:2px solid #d8d8d2}
+.rcard:hover{border-color:#1a3a5c;transform:translateY(-1px)}
+.rcard.risk-high{border-top-color:#c0392b}
+.rcard.risk-warn{border-top-color:#d68910}
+.rcard.risk-opp{border-top-color:#27ae60}
+.rcard .rc-mineral{font-size:13px;font-weight:500;color:#0f0f0d;margin-bottom:2px}
+.rcard .rc-actor{font-size:9px;color:#9a9a93;font-family:'IBM Plex Mono',monospace;margin-bottom:8px}
+.rcard .rc-bar-wrap{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.rcard .rc-bar-track{flex:1;height:5px;background:#e8e8e3;border-radius:2px;position:relative}
+.rcard .rc-bar-fill{height:100%;border-radius:2px}
+.rcard .rc-bar-fill.over{background:#c0392b}
+.rcard .rc-bar-fill.warn{background:#d68910}
+.rcard .rc-bar-fill.ok{background:#27ae60}
+.rcard .rc-bar-fill.na{background:#9a9a93}
+.rcard .rc-bar-cap{position:absolute;top:-3px;height:11px;width:1.5px;background:#c0392b}
+.rcard .rc-pct{font-size:9px;color:#6b6b65;font-family:'IBM Plex Mono',monospace;width:30px;text-align:right}
+.rcard .rc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
+.rcard .rc-desc{font-size:11px;color:#6b6b65;line-height:1.55}
+.rtag{font-size:9px;padding:2px 6px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-weight:500}
+.rtag-red{background:#fdf0f0;color:#8b2020}
+.rtag-amber{background:#fdf6e8;color:#7a4a0a}
+.rtag-green{background:#f0f7ed;color:#2a5a1a}
+.rtag-blue{background:#eef3fb;color:#1a3a6a}
+.risk-dalio{background:#1a3a5c;border-radius:3px;padding:18px 22px;margin-top:4px}
+.risk-dalio p{font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;font-weight:300}
+.risk-dalio strong{color:#e8c84a;font-weight:500}
+.risk-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:10px;color:#9a9a93}
+.rl-item{display:flex;align-items:center;gap:5px}
+.rl-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
+
+/* PARTNERSHIPS */
+.pship-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px}
+.pcard{background:#fafaf7;border:1px solid #d8d8d2;border-radius:3px;padding:12px 14px;cursor:pointer;transition:all .15s}
+.pcard:hover{border-color:#2a5a8c;transform:translateY(-1px)}
+.pcard.sel{border-color:#1a3a5c;border-width:1.5px;background:#eef3fb}
+.pcard .country{font-size:13px;font-weight:500;color:#0f0f0d;margin-bottom:2px}
+.pcard .pdate{font-size:9px;color:#9a9a93;margin-bottom:8px;font-family:'IBM Plex Mono',monospace}
+.pill-row{display:flex;gap:4px;flex-wrap:wrap}
+.pill{font-size:9px;padding:2px 6px;border-radius:2px;font-weight:500;font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+.pill-mou{background:#eef3fb;color:#1a3a6a}
+.pill-ctip{background:#f0f7ed;color:#2a5a1a}
+.pill-sp{background:#f3eefb;color:#3a1a6a}
+.pill-risk{background:#fdf0f0;color:#8b2020}
+
+.detail{background:#f2f2ee;border:1px solid #d8d8d2;border-radius:3px;padding:16px 18px}
+.detail h3{font-size:13px;font-weight:500;color:#0f0f0d;margin-bottom:10px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:640px){.detail-grid{grid-template-columns:1fr}}
+.dcol .dlabel{font-size:9px;color:#9a9a93;margin-bottom:4px;letter-spacing:.08em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace}
+.dcol .dval{font-size:11px;line-height:1.6;color:#3a3a36}
+.dval.ok{color:#2a5a1a}
+.dval.bad{color:#8b2020}
+.detail-status{margin-top:10px;font-size:9px;color:#9a9a93;font-family:'IBM Plex Mono',monospace}
+
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.bar-label{font-size:11px;color:#3a3a36;width:210px;flex-shrink:0}
+.bar-track{flex:1;height:6px;background:#e8e8e3;border-radius:2px;position:relative}
+.bar-fill{height:100%;border-radius:2px}
+.bar-fill.over{background:#c0392b}
+.bar-fill.warn{background:#d68910}
+.bar-cap{position:absolute;top:-4px;height:14px;width:1.5px;background:#c0392b;border-radius:1px}
+.bar-pct{font-size:10px;color:#6b6b65;width:32px;text-align:right;font-family:'IBM Plex Mono',monospace}
+.bar-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:10px;color:#9a9a93}
+.bl-item{display:flex;align-items:center;gap:5px}
+.bl-dot{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+.conc-note{background:#f2f2ee;border:1px solid #d8d8d2;border-radius:3px;padding:14px 16px;margin-top:14px;font-size:12px;color:#3a3a36;line-height:1.7}
+
+.lit-grid{display:grid;gap:7px}
+.lcard{background:#fafaf7;border:1px solid #d8d8d2;border-radius:3px;padding:11px 13px}
+.lcard .ltop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px}
+.lcard .ltitle{font-size:12px;font-weight:500;color:#0f0f0d}
+.lcard .lyear{font-size:9px;color:#9a9a93;white-space:nowrap;font-family:'IBM Plex Mono',monospace}
+.lcard .lfind{font-size:11px;color:#3a3a36;line-height:1.6}
+.lcard .lbottom{display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:4px}
+.lcard .ltags{display:flex;gap:4px;flex-wrap:wrap}
+.lcard .llink{font-size:9px;color:#1a3a5c;text-decoration:none;font-family:'IBM Plex Mono',monospace;white-space:nowrap}
+.lcard .llink:hover{text-decoration:underline}
+
+.gap-table{width:100%;border-collapse:collapse;font-size:11px}
+.gap-table th{text-align:left;padding:8px 10px;font-size:9px;font-weight:500;color:#9a9a93;border-bottom:1.5px solid #c4c4bc;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.gap-table td{padding:9px 10px;border-bottom:1px solid #d8d8d2;color:#3a3a36;vertical-align:top;line-height:1.6}
+.gap-table tr:last-child td{border-bottom:none}
+.gap-table tr:hover td{background:#f2f2ee}
+.says{color:#2a5a1a}
+.does{color:#8b2020}
+
+.china-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+@media(max-width:640px){.china-grid{grid-template-columns:1fr}}
+.china-layer{background:#f2f2ee;border:1px solid #d8d8d2;border-radius:3px;padding:14px 16px}
+.china-layer .cl-num{font-size:9px;color:#8b2020;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.china-layer .cl-title{font-size:12px;font-weight:500;color:#0f0f0d;margin-bottom:6px}
+.china-layer .cl-text{font-size:11px;color:#3a3a36;line-height:1.65}
+
+.redline{background:#fdf0f0;border:1px solid #f0c0c0;border-left:3px solid #8b2020;border-radius:0 3px 3px 0;padding:16px 20px;margin:16px 0}
+.redline-label{font-size:9px;color:#8b2020;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.redline-text{font-size:13px;color:#3a3a36;line-height:1.75;font-style:italic}
+
+.mech-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+@media(max-width:640px){.mech-grid{grid-template-columns:1fr}}
+.mech-item{background:#f2f2ee;border:1px solid #d8d8d2;border-radius:3px;padding:14px 16px;border-top:2px solid #1a3a5c}
+.mech-item .mi-num{font-size:9px;color:#1a3a5c;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.mech-item .mi-title{font-size:12px;font-weight:500;color:#0f0f0d;margin-bottom:6px}
+.mech-item .mi-text{font-size:11px;color:#3a3a36;line-height:1.65}
+
+.counterarg{background:#fdf6e8;border:1px solid #e8d8a0;border-left:3px solid #d68910;border-radius:0 3px 3px 0;padding:14px 18px;margin:14px 0}
+.counterarg-label{font-size:9px;color:#7a4a0a;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.counterarg-text{font-size:12px;color:#3a3a36;line-height:1.75}
+
+.marshall{background:#1a3a5c;border-radius:3px;padding:28px 32px;margin:16px 0;position:relative;overflow:hidden}
+.marshall::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#b8940a,#e8c84a,#b8940a)}
+.marshall p{font-family:'Playfair Display',serif;font-size:15px;color:rgba(255,255,255,0.85);line-height:1.75;font-style:italic}
+.marshall p strong{color:#e8c84a;font-style:normal;font-weight:500}
+
+.proposal{border-left:2px solid #1a3a5c;padding:14px 20px;margin-bottom:14px;background:#f2f2ee;border-radius:0 3px 3px 0}
+.proposal-num{font-size:9px;color:#1a3a5c;font-family:'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.proposal-title{font-size:13px;font-weight:500;color:#0f0f0d;margin-bottom:7px}
+.proposal-text{font-size:12px;color:#3a3a36;line-height:1.8}
+
+footer{background:#1a3a5c;padding:20px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+footer .fl{font-size:11px;color:rgba(255,255,255,0.45);font-weight:300}
+footer .fr{font-size:9px;color:rgba(255,255,255,0.3);font-family:'IBM Plex Mono',monospace;letter-spacing:.05em}
+@media(max-width:680px){footer{padding:16px 20px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-left">
+    <div class="hdr-name">Julius Holzner</div>
+    <div class="hdr-affil">LLB International &amp; European Law &nbsp;·&nbsp; Rijksuniversiteit Groningen</div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-tag">Type <span>Policy Brief</span></div>
+    <div class="hdr-tag">Date <span>April 2026</span></div>
+    <div class="hdr-tag">Window <span>July 2026 CRMA Review</span></div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Critical Raw Materials Act — External Strategy Analysis</div>
+  <h1>The EU has legislated against concentration risk and then <em>systematically built it</em>, without a hedge</h1>
+  <p class="hero-sub">The CRMA's African partnership architecture is not a diversification strategy but a dependency substitution — and the Act's own risk framework proves it. This brief maps the evidence, draws the lessons from Germany and China, and proposes three fixes before the July 2026 mandatory review closes the window.</p>
+  <div class="hero-meta">
+    <div class="meta-chip"><strong>Scope</strong>EU-Africa CRM partnerships 2022–2026</div>
+    <div class="meta-chip"><strong>Framework</strong>CRMA Article 5 vs its own external strategy</div>
+    <div class="meta-chip"><strong>Precedent</strong>Germany-Russia · China-Africa</div>
+    <div class="meta-chip"><strong>Thesis</strong>Dependency substitution, not diversification</div>
+  </div>
+</div>
+
+<nav class="sticky-nav">
+  <a class="nav-item" href="#risk">0. Resource risk</a>
+  <a class="nav-item" href="#germany">I. Germany</a>
+  <a class="nav-item" href="#china">II. China</a>
+  <a class="nav-item" href="#mechanism">III. Mechanism</a>
+  <a class="nav-item" href="#investment">IV. Investment thesis</a>
+  <a class="nav-item" href="#evidence">V. Evidence map</a>
+  <a class="nav-item" href="#proposals">VI. Proposals</a>
+  <a class="nav-item" href="#conclusion">VII. Conclusion</a>
+</nav>
+
+<div class="page">
+
+  <!-- 0. RESOURCE RISK TIMELINE -->
+  <div class="risk-widget" id="risk">
+    <div class="risk-head">
+      <h2>Why this is urgent now — the resource risk timeline</h2>
+      <p>Most EU policymakers hear "critical minerals" and assume the problem is future and theoretical. The data below shows it is present and structural. Ray Dalio's core insight applies directly: you do not build the hedge when the crisis hits. By then the counterparty knows you are desperate and the price of the hedge is the crisis itself. The window to act is now, in the calm, before scarcity premiums replace political risk discounts.</p>
+    </div>
+    <div class="risk-tabs">
+      <button class="risk-tab on" onclick="showRisk('r3',this)">3-year · Acute shocks</button>
+      <button class="risk-tab" onclick="showRisk('r5',this)">5-year · Structural deficits</button>
+      <button class="risk-tab" onclick="showRisk('r10',this)">10-year · Civilisational constraints</button>
+    </div>
+
+    <div id="r3" class="risk-panel on">
+      <div class="risk-horizon-label">2025–2028 · Weaponisation already active</div>
+      <div class="risk-grid">
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Rare earth magnets</div>
+          <div class="rc-actor">China · 94% of global NdFeB magnet output</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill over" style="width:94%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">94%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-red">Exceeds 65% cap</span><span class="rtag rtag-red">Controls active</span></div>
+          <div class="rc-desc">October 2025 export controls extended to all components containing Chinese REE materials globally, effective December 2025. Wind turbines, EV motors, defence systems all affected.</div>
+        </div>
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Cobalt</div>
+          <div class="rc-actor">DRC · 75% mined · China 78% refined</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill over" style="width:75%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">75%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-red">Exceeds 65% cap</span><span class="rtag rtag-red">Export ban live</span></div>
+          <div class="rc-desc">DRC export ban February 2025, extended twice. 2026 quota set at 50% of normal monthly volumes. EU-DRC MoU signed October 2023 — provided zero protection.</div>
+        </div>
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Semiconductors · gallium &amp; germanium</div>
+          <div class="rc-actor">China · dominant in both inputs</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill over" style="width:80%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">~80%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-red">Controls active</span><span class="rtag rtag-amber">Pattern proof</span></div>
+          <div class="rc-desc">China restricted gallium and germanium exports to the US in December 2024. Proves the export control escalation is a repeatable geopolitical instrument, not a one-off. CRMA does not address semiconductor inputs.</div>
+        </div>
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Copper</div>
+          <div class="rc-actor">DRC · 47% mined · deficit emerging</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill warn" style="width:47%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">47%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-amber">Approaching cap</span><span class="rtag rtag-red">Shortfall pipeline</span></div>
+          <div class="rc-desc">IEA: 30% supply shortfall by 2035. Declining ore grades, rising capex, long permitting timelines. The crunch begins now in the project pipeline — not in 2035.</div>
+        </div>
+      </div>
+      <div class="risk-dalio">
+        <p><strong>The Dalio logic:</strong> In 2025, three separate mineral export bans or control escalations occurred — REE magnets (China, October), cobalt (DRC, February), gallium/germanium (China, December 2024). Each was "unexpected" by markets. Each was entirely predictable from the concentration data. The EU had the data. It did not build the hedge. That is not bad luck. That is a policy choice.</p>
+      </div>
+      <div class="risk-legend">
+        <div class="rl-item"><div class="rl-dot" style="background:#c0392b"></div>Exceeds CRMA 65% cap</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#d68910"></div>Approaching cap</div>
+        <div class="rl-item"><div style="width:1.5px;height:11px;background:#c0392b;flex-shrink:0"></div>65% CRMA limit</div>
+      </div>
+    </div>
+
+    <div id="r5" class="risk-panel">
+      <div class="risk-horizon-label">2025–2030 · Structural realignment · deficit emergence</div>
+      <div class="risk-grid">
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Copper</div>
+          <div class="rc-actor">DRC + Chile · structural gap</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill warn" style="width:47%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">47%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-red">Critical gap</span><span class="rtag rtag-red">No pipeline fix</span></div>
+          <div class="rc-desc">30% shortfall by 2035 with no project pipeline sufficient to close it. Climate risk: 7% of global copper supply disrupted by floods/droughts in 2024 — rising. Every EV, wind turbine and grid upgrade requires copper.</div>
+        </div>
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Phosphoric acid · LFP batteries</div>
+          <div class="rc-actor">China · 75% of purified supply</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill over" style="width:75%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">75%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-red">Exceeds cap</span><span class="rtag rtag-red">Gap from ~2030</span></div>
+          <div class="rc-desc">LFP batteries now cover nearly 50% of EV market (up from 10% in 2020). Purified phosphoric acid is the critical input. Planned projects insufficient to meet projected demand from approximately 2030.</div>
+        </div>
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Manganese sulphate</div>
+          <div class="rc-actor">China · 95% of high-purity supply</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill over" style="width:95%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">95%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-red">Exceeds cap</span><span class="rtag rtag-amber">Next-gen batteries</span></div>
+          <div class="rc-desc">Key input for sodium-ion and manganese-rich lithium-ion batteries scaling in the 2028–2032 window. Less visible than REEs but same concentration risk structure. Early-mover processing investments still possible.</div>
+        </div>
+        <div class="rcard risk-warn">
+          <div class="rc-mineral">Rare earths · processing diversification</div>
+          <div class="rc-actor">EU + Australia + Canada · building</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill over" style="width:94%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">94%</div></div>
+          <div class="rc-tags"><span class="rtag rtag-amber">Window open</span><span class="rtag rtag-blue">5–7yr lead time</span></div>
+          <div class="rc-desc">EU 47 strategic projects designated. Australia, Canada, US building processing capacity. But 5–7 year lead times mean supply relief only by end of this window at earliest. Projects announced now deliver post-2030.</div>
+        </div>
+      </div>
+      <div class="risk-dalio">
+        <p><strong>The Dalio logic:</strong> The 5-year window is the last moment to build the hedge cheaply. Copper project lead times are 10–15 years. Phosphoric acid processing plants take 5–7 years. Manganese sulphate refinery capacity requires 4–6 years. Every year of delay is a year the hedge becomes more expensive and the counterparty more powerful. The EU's current posture — announcing partnerships and waiting for private capital — relies on political frameworks where binding capital commitments are required.</p>
+      </div>
+      <div class="risk-legend">
+        <div class="rl-item"><div class="rl-dot" style="background:#c0392b"></div>Exceeds CRMA 65% cap</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#d68910"></div>Approaching cap / opportunity</div>
+        <div class="rl-item"><div style="width:1.5px;height:11px;background:#c0392b;flex-shrink:0"></div>65% CRMA limit</div>
+      </div>
+    </div>
+
+    <div id="r10" class="risk-panel">
+      <div class="risk-horizon-label">2025–2035 · Deep structural scarcity · new power maps</div>
+      <div class="risk-grid">
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Copper · structural deficit</div>
+          <div class="rc-actor">Global · no pipeline fix</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill over" style="width:47%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">rising</div></div>
+          <div class="rc-tags"><span class="rtag rtag-red">Structural deficit</span><span class="rtag rtag-green">Investment thesis</span></div>
+          <div class="rc-desc">Copper deficit structural by mid-2030s. Every GW of wind, solar, storage, grid and EV charging is copper-intensive. The demand curve is fixed. The supply curve cannot keep pace. Copper equity today is energy security tomorrow.</div>
+        </div>
+        <div class="rcard risk-high">
+          <div class="rc-mineral">Lithium</div>
+          <div class="rc-actor">Argentina · Chile · DRC</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill ok" style="width:30%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">ok now</div></div>
+          <div class="rc-tags"><span class="rtag rtag-amber">Deficit by 2030s</span><span class="rtag rtag-green">Window open</span></div>
+          <div class="rc-desc">Near-term well-supplied — prices depressed, window to lock long-term contracts. Rapidly growing demand pushes into deficit by 2030s. Processing is the bottleneck not mining. Argentina and Chile lithium triangle vs Chinese processing dominance.</div>
+        </div>
+        <div class="rcard risk-high">
+          <div class="rc-mineral">African mineral sovereignty</div>
+          <div class="rc-actor">AU · DRC · Zambia · SA · Zimbabwe</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill warn" style="width:60%"></div><div class="rc-bar-cap" style="left:65%"></div></div><div class="rc-pct">rising</div></div>
+          <div class="rc-tags"><span class="rtag rtag-amber">Assertiveness rising</span><span class="rtag rtag-green">First-mover window</span></div>
+          <div class="rc-desc">AU Green Minerals Strategy 2025. Zimbabwe, Tanzania, Ghana banning raw lithium exports. DRC-Zambia transboundary battery SEZ. African states could capture $2.5tr additional value by 2050 through processing. The window for equity partnerships at pre-sovereignty-premium prices is closing.</div>
+        </div>
+        <div class="rcard risk-opp">
+          <div class="rc-mineral">Clean energy infrastructure</div>
+          <div class="rc-actor">Global · massive opportunity</div>
+          <div class="rc-bar-wrap"><div class="rc-bar-track"><div class="rc-bar-fill ok" style="width:100%"></div></div><div class="rc-pct">∞</div></div>
+          <div class="rc-tags"><span class="rtag rtag-green">Massive opportunity</span><span class="rtag rtag-blue">First-mover returns</span></div>
+          <div class="rc-desc">IEA: $500–600bn needed in critical mineral supply chains globally to 2040. EU institutional capital that takes equity positions in African processing infrastructure now buys exposure at political risk discounts before scarcity premiums materialise. The returns flow back. The manufacturing stays at source.</div>
+        </div>
+      </div>
+      <div class="risk-dalio">
+        <p><strong>The Dalio logic:</strong> The 10-year horizon is not a prediction. It is the compounding of decisions made today. Countries that own processing infrastructure in 2035 will set the terms for the industrial era that follows. Countries that signed MoUs will be buyers in a seller's market. <strong>The EU still has a choice. That choice expires on a timescale measured in years, not decades.</strong></p>
+      </div>
+      <div class="risk-legend">
+        <div class="rl-item"><div class="rl-dot" style="background:#c0392b"></div>High structural risk</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#d68910"></div>Watch / transition</div>
+        <div class="rl-item"><div class="rl-dot" style="background:#27ae60"></div>Opportunity if acted on now</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- I. GERMANY -->
+  <div class="card" id="germany">
+    <div class="card-label">I — The precedent</div>
+    <h2>Germany did not build this dependency through negligence</h2>
+    <p>Germany today pays some of the highest industrial energy prices in the world. The cause is not a market failure — it is the predictable consequence of a deliberate strategic choice: decades of concentrated dependency on a single supplier, without a hedge, in the confident belief that stability was structural rather than contingent. The EU watched this unfold and then, in the same legislative cycle that produced REPowerEU, quietly built an identical architecture for critical minerals. The Critical Raw Materials Act legislates against concentration risk. The partnerships signed under it systematically rebuild it. This brief uses the Act's own risk framework to prove the contradiction — and to propose three fixes before the July 2026 mandatory review closes the window.</p>
+    <p>Germany built its Russian gas dependency through <em>Wandel durch Handel</em> — a coherent, explicitly argued strategic logic of change through trade. The argument had serious intellectual backing, political consensus across decades, and institutional reinforcement through Nordstream 1 and 2. It was catastrophically wrong. When it failed, it failed completely — no hedge, no fallback, no buffer that mattered. Four characteristics made the failure total: no liquid spot market for alternatives, no stored buffer, no contracted alternatives, and infrastructure lock-in optimised for a single supplier. The EU's African mineral position shares all four.</p>
+    <div class="thesis">"The EU has legislated against concentration risk and then systematically built it, without a hedge. The CRMA's African architecture is not a diversification strategy but a dependency substitution — and its own risk framework proves it."</div>
+    <p>The CRMA's own benchmark prohibits more than 65% reliance on any single country for any strategic raw material. Of seven key minerals assessed here, five already breach this threshold. The DRC exercised exactly this leverage in February 2025 with a cobalt export ban, extended twice, cutting 2026 quota volumes to roughly half of normal monthly levels. The architecture failed its own stress test before it was fully built.</p>
+    <div class="sources">
+      <div class="sources-label">Sources</div>
+      <div class="source-links">
+        <a class="src-link" href="https://single-market-economy.ec.europa.eu/sectors/raw-materials/areas-specific-interest/critical-raw-materials/critical-raw-materials-act_en" target="_blank">CRMA — European Commission</a>
+        <a class="src-link" href="https://www.iea.org/reports/global-critical-minerals-outlook-2025/executive-summary" target="_blank">IEA Critical Minerals Outlook 2025</a>
+        <a class="src-link" href="https://www.fastmarkets.com/insights/cobalt-market-outlook-2025-drc-quota-system/" target="_blank">Fastmarkets — DRC export quota</a>
+        <a class="src-link" href="https://odi.org/en/insights/critical-minerals-geopolitics-in-2026-risks-supply-chains-and-global-power-shifts/" target="_blank">ODI — Geopolitics 2026</a>
+        <a class="src-link" href="https://www.iea.org/commentaries/with-new-export-controls-on-critical-minerals-supply-concentration-risks-become-reality" target="_blank">IEA — Export controls commentary</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- II. CHINA -->
+  <div class="card" id="china">
+    <div class="card-label">II — The comparison</div>
+    <h2>China didn't secure minerals. It bought the processing relationship, the infrastructure, and the political dependency simultaneously.</h2>
+    <p>The EU walks into African capitals with ESG conditionality, governance benchmarks, and supply chain due diligence requirements — while simultaneously maintaining an MoU with Rwanda that the UN says is sourcing conflict minerals from DRC. The moral high ground is not just unconvincing. It is empirically false. And African negotiators know it, which is precisely why they keep their options open with China. The argument is not that ESG doesn't matter. It is that <em>credibility precedes conditionality</em>. You cannot demand governance standards from a partner while your own partnership architecture has a documented due diligence failure in the second row of your strategic project list.</p>
+    <p>China operated on a three-layer model that the EU has not matched at any layer:</p>
+    <div class="china-grid">
+      <div class="china-layer">
+        <div class="cl-num">Layer 01</div>
+        <div class="cl-title">Mining equity, not offtake</div>
+        <div class="cl-text">Chinese firms hold stakes in 18 of 26 DRC cobalt assets and 80% of African lithium mines. Not agreements to buy — ownership. Skin in the game from day one, creating shared upside and political relationships that outlast any government.</div>
+      </div>
+      <div class="china-layer">
+        <div class="cl-num">Layer 02</div>
+        <div class="cl-title">Processing inside Africa</div>
+        <div class="cl-text">Zhejiang Huayou's $400m lithium sulphate plant in Zimbabwe. CMOC refinery investments in DRC. China built the downstream inside the country — creating jobs, tax revenue, and political dependency simultaneously. The EU signs MoUs that prioritise volume commitments over equity — political instruments dressed as industrial partnerships.</div>
+      </div>
+      <div class="china-layer">
+        <div class="cl-num">Layer 03</div>
+        <div class="cl-title">Infrastructure as leverage</div>
+        <div class="cl-text">Belt and Road corridors, ports, railways — all designed to route mineral flows toward China. The Tanzania-Zambia railway connects to Dar es Salaam. The EU's Lobito Corridor counter is one corridor against two decades of Chinese infrastructure investment.</div>
+      </div>
+    </div>
+    <p>China's model works for China. But it is now generating exactly the backlash the EU could exploit — debt traps, environmental degradation, labour practices, governance conflicts. African civil society and governments are increasingly vocal about Chinese extractivism. The DRC mining minister said it directly: <em>"colonial-era pit to port must end."</em> He was not only talking about Europe.</p>
+    <div class="redline">
+      <div class="redline-label">The red line</div>
+      <div class="redline-text">The EU must not replicate China's extraction-first model. But it must match China's capital commitment and infrastructure seriousness — while differentiating on the one dimension China structurally cannot offer: genuine processing partnerships with African equity participation, rule-of-law frameworks, and ESG standards that withstand scrutiny. Processing partnerships require capital commitments before governance conditionality can carry credibility.</div>
+    </div>
+    <div class="sources">
+      <div class="sources-label">Sources</div>
+      <div class="source-links">
+        <a class="src-link" href="https://www.whoownsafrica.com/magazine/who-owns-africas-mining-sector-china-vs-usa-vs-europe/" target="_blank">Who Owns Africa — ownership analysis</a>
+        <a class="src-link" href="https://www.sciencedirect.com/science/article/pii/S2214629625002944" target="_blank">ScienceDirect — EU energy transition diplomacy</a>
+        <a class="src-link" href="https://afripoli.org/how-can-african-states-benefit-from-the-eu-critical-raw-material-act-and-the-uk-critical-minerals-strategy" target="_blank">AfriPoli — CRMA African benefit</a>
+        <a class="src-link" href="https://ecfr.eu/publication/from-ore-to-more-mineral-partnerships-for-african-industrialisation/" target="_blank">ECFR — From ore to more</a>
+        <a class="src-link" href="https://www.courthousenews.com/eu-woos-mineral-rich-africa-as-china-tightens-resource-grip/" target="_blank">Courthouse News — EU vs China Africa</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- III. MECHANISM -->
+  <div class="card" id="mechanism">
+    <div class="card-label">III — The mechanism</div>
+    <h2>Dependency cannot always be avoided. What can be designed is mutually assured stability.</h2>
+    <p>The green transition is not a one-time procurement exercise. It is a Kaizen-dependent industrial transformation — a continuous, decades-long process requiring predictable, high-specification mineral inputs at scale. Toyota's just-in-time system only functions because supplier relationships are treated as long-term equity partnerships. Toyota co-invests in supplier capability and takes on supplier risk in downturns. In return it gets reliability that no spot market can provide. The EU is attempting to run a Kaizen-dependent industrial strategy on a spot-market diplomatic model. Memoranda of Understanding are the supply chain equivalent of buying parts on the open market the morning the factory needs them.</p>
+    <p>The question is not how to eliminate dependency — the minerals are where they are — but how to structure it so that both sides have something to lose if the relationship breaks. Five instruments achieve this:</p>
+    <div class="mech-grid">
+      <div class="mech-item">
+        <div class="mi-num">Instrument 01</div>
+        <div class="mi-title">Equity co-investment — the Toyota model formalised</div>
+        <div class="mi-text">When the EIB holds equity in a Zambian cobalt refinery, both sides have capital at risk. When Zambian state mining company ZCCM holds equity in the downstream offtake chain into Europe, Zambia has a financial interest in European battery production succeeding. Both sides now have something to lose. The relationship becomes self-enforcing in a way no MoU can replicate.</div>
+      </div>
+      <div class="mech-item">
+        <div class="mi-num">Instrument 02</div>
+        <div class="mi-title">Processing corridors as reciprocal lock-in</div>
+        <div class="mi-text">The Lobito Corridor is currently designed as European extraction infrastructure. Redesign it as African industrial infrastructure that connects to European markets. Build processing facilities along the corridor, not at the European end. Then the corridor's economic value to Angola, DRC and Zambia depends on European market access — and EU supply security depends on corridor stability. Neither side can defect without destroying value they own.</div>
+      </div>
+      <div class="mech-item">
+        <div class="mi-num">Instrument 03</div>
+        <div class="mi-title">Preferential access tied to processing</div>
+        <div class="mi-text">Zero tariff on battery-grade lithium sulphate from Zimbabwe; standard tariff on raw spodumene. That single instrument redirects the processing investment incentive without renegotiating a single MoU. The EU's existing Economic Partnership Agreements and GSP architecture already contain this tool. Use it proactively rather than reactively. Note: AfCFTA compatibility requires this be offered at AU level, not bilaterally, to avoid distorting African internal trade flows.</div>
+      </div>
+      <div class="mech-item">
+        <div class="mi-num">Instrument 04</div>
+        <div class="mi-title">Strategic stockpile as negotiating stability</div>
+        <div class="mi-text">90 days of strategic cobalt reserves makes a DRC export ban an inconvenience not a crisis. The EU's gas storage regulation mandates 80% fill levels by November each year — exactly this instrument applied to minerals. The EU already knows how to legislate stockpile obligations. Apply the same logic to the six minerals identified in the risk timeline above.</div>
+      </div>
+      <div class="mech-item">
+        <div class="mi-num">Instrument 05</div>
+        <div class="mi-title">AU-level framework with pre-negotiated fallbacks</div>
+        <div class="mi-text">One multilateral instrument with all African partners simultaneously eliminates single-country political risk. Pre-negotiate access rights with second and third-tier producers — Morocco, Mozambique, Tanzania, Botswana — that activate if a primary bilateral fails. These cost almost nothing to negotiate in peacetime. They cost everything to negotiate after a supply shock, when the counterparty knows you are desperate.</div>
+      </div>
+    </div>
+    <div class="counterarg">
+      <div class="counterarg-label">The obvious counter-argument — and why it fails</div>
+      <div class="counterarg-text">The standard objection to equity co-investment in Africa is political risk — expropriation, renegotiation, regime change. Zimbabwe nationalised mining assets. DRC has a history of contract revision. This objection is real but it misunderstands the mechanism. Mutual equity exposure does not eliminate political risk. It changes the calculus. A government that holds equity in European downstream processing loses that equity value if it expropriates the upstream. A government whose industrial corridor depends on European market access destroys its own export revenue if it cuts the relationship. The hedge is not legal protection — it is aligned incentives. That is precisely what the current MoU architecture lacks and what genuine co-investment creates.</div>
+    </div>
+    <div class="sources">
+      <div class="sources-label">Sources</div>
+      <div class="source-links">
+        <a class="src-link" href="https://www.swp-berlin.org/10.18449/2025C19/" target="_blank">SWP — EU-Zambia partnership</a>
+        <a class="src-link" href="https://www.swp-berlin.org/publikation/strategic-raw-material-cooperation-between-africa-and-europe" target="_blank">SWP — Africa-Europe CRM cooperation</a>
+        <a class="src-link" href="https://www.oxfordenergy.org/wpcms/wp-content/uploads/2025/02/Insight-165-Europes-cobalt-supply-security-outlook.pdf" target="_blank">Oxford Energy — cobalt supply security</a>
+        <a class="src-link" href="https://african.business/2025/11/resources/europe-backs-african-push-to-get-more-value-from-critical-minerals" target="_blank">African Business — Luanda Summit</a>
+        <a class="src-link" href="https://afripoli.org/the-tumultuous-path-toward-eu-china-africa-trilateral-cooperation-on-critical-raw-materials-in-africa" target="_blank">AfriPoli — EU-China-Africa trilateral</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- IV. INVESTMENT THESIS -->
+  <div class="card" id="investment">
+    <div class="card-label">IV — The investment thesis</div>
+    <h2>This is not a cost. It is a first-mover position in the asset class of the next industrial era.</h2>
+    <p>Africa holds 48% of global cobalt reserves, 43% of manganese, 24% of bauxite, and meaningful shares of copper, graphite, and platinum-group metals. These are not legacy commodities. They are the input stack for every technology the EU's industrial future depends on — electric vehicles, wind turbines, battery storage, defence systems, AI data centres. The IEA projects supply shortfalls in copper and lithium within a decade. The demand curve is structurally upward and the supply curve cannot keep pace.</p>
+    <p>An EU institutional investor that takes equity positions in African processing infrastructure today is not spending aid money. It is buying exposure to the single most strategically valuable asset class of the next industrial era, at a price that reflects current African political risk discounts rather than future scarcity premiums. When those scarcity premiums materialise — and the IEA's own data says they will — the returns flow back to European institutional balance sheets while the processing capacity stays in Africa, creating the jobs, tax revenue and industrial development that makes the relationship politically sustainable on both sides. The profits trickle back. The manufacturing capability stays at source.</p>
+    <div class="marshall">
+      <p>The Marshall Plan was not altruism. America invested in European reconstruction because a prosperous, stable, industrialising Europe was <strong>the single best long-run customer for American exports, the most reliable buffer against Soviet expansion, and the highest-returning capital allocation available in 1948</strong>. Seventy-five years later, that investment still pays dividends — in trade relationships, in alliance structures, in the kind of deep institutional friendship that persists even when individual leaders make threats about annexing allied territory. The relationship survived because it was built on genuine mutual prosperity, not transactional extraction. The EU has the same opportunity in Africa today. The minerals are the entry point. The industrial partnership is the product. <strong>If everyone loses, no one gains.</strong> That is not idealism. It is the most hardheaded strategic calculation available.</p>
+    </div>
+    <p>Beyond supply security, every processing facility built in Zambia, every battery component plant in the DRC corridor, every rare earth refinery in Namibia is also a reason for a skilled African engineer not to migrate to Germany. The investment thesis, the supply security thesis, and the migration management thesis converge on exactly the same intervention — African industrial development at the source of the minerals Europe needs. This is not a foreign policy concession. It is a portfolio allocation decision that happens to solve three geopolitical problems simultaneously.</p>
+    <div class="sources">
+      <div class="sources-label">Sources</div>
+      <div class="source-links">
+        <a class="src-link" href="https://www.iea.org/reports/global-critical-minerals-outlook-2025/executive-summary" target="_blank">IEA Outlook 2025 — supply projections</a>
+        <a class="src-link" href="https://www.whoownsafrica.com/magazine/who-owns-africas-mining-sector-china-vs-usa-vs-europe/" target="_blank">Who Owns Africa — $2.5tr processing value</a>
+        <a class="src-link" href="https://source.benchmarkminerals.com/article/can-africa-fill-the-eus-critical-mineral-deficit" target="_blank">Benchmark Minerals — Africa deficit</a>
+        <a class="src-link" href="https://saiia.org.za/research/south-africa-and-the-eu-should-collaborate-to-build-strategic-interdependence-in-critical-minerals/" target="_blank">SAIIA — SA-EU strategic interdependence</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- V. EVIDENCE MAP -->
+  <div class="widget" id="evidence">
+    <div class="widget-head"><h2>V — Interactive evidence map</h2></div>
+    <div class="tabs">
+      <button class="tab on" onclick="show('p1',this)">Partnerships</button>
+      <button class="tab" onclick="show('p2',this)">Concentration vs cap</button>
+      <button class="tab" onclick="show('p3',this)">Literature (12 papers)</button>
+      <button class="tab" onclick="show('p4',this)">Promise vs reality</button>
+    </div>
+
+    <div id="p1" class="panel on">
+      <div class="panel-label">5 African agreements — click to expand</div>
+      <div class="pship-grid">
+        <div class="pcard sel" onclick="selP(0,this)"><div class="country">Namibia</div><div class="pdate">Nov 2022</div><div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-sp">Strat. project</span></div></div>
+        <div class="pcard" onclick="selP(1,this)"><div class="country">DRC</div><div class="pdate">Oct 2023</div><div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-risk">Export ban</span></div></div>
+        <div class="pcard" onclick="selP(2,this)"><div class="country">Zambia</div><div class="pdate">Oct 2023</div><div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-risk">Local sourcing</span></div></div>
+        <div class="pcard" onclick="selP(3,this)"><div class="country">Rwanda</div><div class="pdate">Feb 2024</div><div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-risk">Conflict link</span></div></div>
+        <div class="pcard" onclick="selP(4,this)"><div class="country">South Africa</div><div class="pdate">Nov 2025</div><div class="pill-row"><span class="pill pill-ctip">CTIP</span><span class="pill pill-sp">€750m GG</span></div></div>
+      </div>
+      <div class="detail" id="pdetail"></div>
+      <div style="margin-top:14px">
+        <div class="panel-label">Key data across all 5 partnerships</div>
+        <div class="stats">
+          <div class="stat"><div class="stat-label">Legally binding</div><div class="stat-val danger">1 of 5</div><div class="stat-sub">4 are non-binding MoUs</div></div>
+          <div class="stat"><div class="stat-label">African strat. projects</div><div class="stat-val danger">4 of 60</div><div class="stat-sub">6.7% of global pipeline</div></div>
+          <div class="stat"><div class="stat-label">Processing commits</div><div class="stat-val danger">0</div><div class="stat-sub">Zero enforceable in Africa</div></div>
+          <div class="stat"><div class="stat-label">DRC export ban</div><div class="stat-val">Feb 2025</div><div class="stat-sub">Extended twice, 50% quota</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p2" class="panel">
+      <div class="panel-label">Actual EU supply concentration vs CRMA 65% single-country cap</div>
+      <div class="bar-row"><div class="bar-label">REE magnets (China)</div><div class="bar-track"><div class="bar-fill over" style="width:94%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">94%</div></div>
+      <div class="bar-row"><div class="bar-label">Manganese sulphate (China)</div><div class="bar-track"><div class="bar-fill over" style="width:95%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">95%</div></div>
+      <div class="bar-row"><div class="bar-label">PGMs (South Africa)</div><div class="bar-track"><div class="bar-fill over" style="width:89%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">89%</div></div>
+      <div class="bar-row"><div class="bar-label">Cobalt refined (China)</div><div class="bar-track"><div class="bar-fill over" style="width:78%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">78%</div></div>
+      <div class="bar-row"><div class="bar-label">Cobalt mined (DRC)</div><div class="bar-track"><div class="bar-fill over" style="width:75%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">75%</div></div>
+      <div class="bar-row"><div class="bar-label">Phosphoric acid (China)</div><div class="bar-track"><div class="bar-fill over" style="width:75%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">75%</div></div>
+      <div class="bar-row"><div class="bar-label">Manganese mined (S. Africa)</div><div class="bar-track"><div class="bar-fill warn" style="width:55%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">55%</div></div>
+      <div class="bar-row"><div class="bar-label">Copper mined (DRC)</div><div class="bar-track"><div class="bar-fill warn" style="width:47%"></div><div class="bar-cap" style="left:65%"></div></div><div class="bar-pct">47%</div></div>
+      <div class="bar-legend">
+        <div class="bl-item"><div class="bl-dot" style="background:#c0392b"></div>Exceeds CRMA 65% cap</div>
+        <div class="bl-item"><div class="bl-dot" style="background:#d68910"></div>Approaching cap</div>
+        <div class="bl-item"><div style="width:1.5px;height:13px;background:#c0392b;flex-shrink:0"></div>65% CRMA limit</div>
+      </div>
+      <div class="conc-note">Six of eight minerals already breach the CRMA's own 65% cap. EU partnerships deepen concentration in DRC and South Africa — the same chokepoints, without a hedge instrument. The DRC exercised supply leverage in February 2025. The architecture failed its own stress test.</div>
+    </div>
+
+    <div id="p3" class="panel">
+      <div class="panel-label">12 key sources — consistent signal across the literature</div>
+      <div class="lit-grid">
+        <div class="lcard"><div class="ltop"><div class="ltitle">SWP Berlin — EU-Zambia partnership</div><div class="lyear">May 2025</div></div><div class="lfind">MoU legally non-binding. China and Gulf acting faster with direct capital. EU losing ground on speed and scale.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">Speed gap</span><span class="pill pill-mou">Non-binding</span></div><a class="llink" href="https://www.swp-berlin.org/10.18449/2025C19/" target="_blank">swp-berlin.org →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">SWP Berlin — EU external CRM strategy</div><div class="lyear">Feb 2026</div></div><div class="lfind">Project pipeline limited, financing fragmented. African partners expect industrial co-investment, not political frameworks.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">Financing gap</span></div><a class="llink" href="https://www.swp-berlin.org/publikation/strategic-raw-material-cooperation-between-africa-and-europe" target="_blank">swp-berlin.org →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">Oxford Energy — EU cobalt supply security</div><div class="lyear">Feb 2025</div></div><div class="lfind">DRC 75% global cobalt. EU needs 15x more cobalt by 2050. MoUs are soft-power tools with no legal guarantees.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">75% DRC</span></div><a class="llink" href="https://www.oxfordenergy.org/wpcms/wp-content/uploads/2025/02/Insight-165-Europes-cobalt-supply-security-outlook.pdf" target="_blank">oxfordenergy.org →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">IEA — Global Critical Minerals Outlook</div><div class="lyear">2025</div></div><div class="lfind">China refines 19/20 strategic minerals at 70% avg. Copper 30% shortfall by 2035. Export restrictions proliferating.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">19/20 minerals</span></div><a class="llink" href="https://www.iea.org/reports/global-critical-minerals-outlook-2025/executive-summary" target="_blank">iea.org →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">ODI — Critical minerals geopolitics 2026</div><div class="lyear">Jan 2026</div></div><div class="lfind">60 strategic projects, only 4 in Africa. RESourceEU €3bn far below $500–600bn sector need to 2040.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">Investment lag</span></div><a class="llink" href="https://odi.org/en/insights/critical-minerals-geopolitics-in-2026-risks-supply-chains-and-global-power-shifts/" target="_blank">odi.org →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">ScienceDirect — EU energy transition diplomacy</div><div class="lyear">Jul 2025</div></div><div class="lfind">EU partnerships risk reinforcing Africa as raw material supplier without value addition. Unequal exchange.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">Extractive</span></div><a class="llink" href="https://www.sciencedirect.com/science/article/pii/S2214629625002944" target="_blank">sciencedirect.com →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">AfriPoli — CRMA African benefit analysis</div><div class="lyear">Sep 2024</div></div><div class="lfind">CRMA constraints on offshore processing contradict value addition promises. No real capital relocation to Africa.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">Contradiction</span></div><a class="llink" href="https://afripoli.org/how-can-african-states-benefit-from-the-eu-critical-raw-material-act-and-the-uk-critical-minerals-strategy" target="_blank">afripoli.org →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">ECFR — From ore to more</div><div class="lyear">Sep 2025</div></div><div class="lfind">European participation in African value addition negligible. Field research in Namibia and Zambia. EU offer weaker than China's on capital speed.</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">Capital gap</span></div><a class="llink" href="https://ecfr.eu/publication/from-ore-to-more-mineral-partnerships-for-african-industrialisation/" target="_blank">ecfr.eu →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">African Business — Luanda Summit</div><div class="lyear">Nov 2025</div></div><div class="lfind">First EU endorsement of African processing. Africa pursuing multi-alignment: China, Gulf, India, Russia simultaneously.</div><div class="lbottom"><div class="ltags"><span class="pill pill-ctip">Processing shift</span></div><a class="llink" href="https://african.business/2025/11/resources/europe-backs-african-push-to-get-more-value-from-critical-minerals" target="_blank">african.business →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">SAIIA — SA-EU strategic interdependence</div><div class="lyear">Dec 2025</div></div><div class="lfind">CTIP first of kind combining competitiveness and climate. EU 50%+ of SA FDI. Template for future partnerships.</div><div class="lbottom"><div class="ltags"><span class="pill pill-ctip">CTIP model</span></div><a class="llink" href="https://saiia.org.za/research/south-africa-and-the-eu-should-collaborate-to-build-strategic-interdependence-in-critical-minerals/" target="_blank">saiia.org.za →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">Fastmarkets — DRC cobalt export quota</div><div class="lyear">Oct 2025</div></div><div class="lfind">Export ban Feb 2025, extended twice. 2026 quota at 50% normal volumes. DRC: "colonial-era pit to port must end."</div><div class="lbottom"><div class="ltags"><span class="pill pill-risk">Ban executed</span></div><a class="llink" href="https://www.fastmarkets.com/insights/cobalt-market-outlook-2025-drc-quota-system/" target="_blank">fastmarkets.com →</a></div></div>
+        <div class="lcard"><div class="ltop"><div class="ltitle">Mining Technology — EU Africa projects</div><div class="lyear">Feb 2026</div></div><div class="lfind">Second CRMA round closed Jan 2026. Kobaloni cobalt refinery (Zambia): capital raise still pending FID.</div><div class="lbottom"><div class="ltags"><span class="pill pill-sp">Processing focus</span><span class="pill pill-risk">Capital gap</span></div><a class="llink" href="https://www.mining-technology.com/features/eu-backed-minerals-projects-in-africa-move-from-policy-to-proof/" target="_blank">mining-technology.com →</a></div></div>
+      </div>
+    </div>
+
+    <div id="p4" class="panel">
+      <div class="panel-label">Promise vs reality — CRMA stated goals vs actual architecture</div>
+      <table class="gap-table">
+        <thead><tr><th style="width:32%">CRMA stated goal</th><th style="width:34%">What EU actually built</th><th style="width:34%">Gap / risk created</th></tr></thead>
+        <tbody>
+          <tr><td class="says">No single country &gt;65% of any SRM</td><td class="does">DRC 75% cobalt, China 78% refined, SA 89% PGMs, China 94% REE magnets — all breach cap</td><td>CRMA benchmark violated before strategy matures. Partnerships deepen not diversify.</td></tr>
+          <tr><td class="says">Mutually beneficial partnerships supporting African development</td><td class="does">4 of 5 instruments are non-binding MoUs. Zero enforceable processing commitments in Africa.</td><td>No legal mechanism to enforce value addition. African states rationally pursue multi-alignment.</td></tr>
+          <tr><td class="says">Supply chain resilience through diversification</td><td class="does">All partnerships concentrate in same 3–4 countries for same minerals. No AU-level framework.</td><td>Bilateral concentration = same single-point failure risk the CRMA was designed to prevent, relocated from China to Africa.</td></tr>
+          <tr><td class="says">Strategic projects driving processing capacity</td><td class="does">4 African strategic projects of 60 total. Kobaloni refinery still raising capital Q1 2026.</td><td>African refining share of global cobalt: 3%. EU deepening extraction dependency not processing.</td></tr>
+          <tr><td class="says">€400bn Global Gateway mobilised</td><td class="does">Largely repackaged loans. €60.5bn Sub-Saharan Africa competes with migration and humanitarian lines.</td><td>Capital orders of magnitude below IEA's $500–600bn global sector need to 2040. No ring-fencing.</td></tr>
+          <tr><td class="says">Stable partner relationships — no hedge required</td><td class="does">DRC export ban Feb 2025 (extended twice). Zambia local sourcing law Jan 2026. Rwanda compromised.</td><td>3 of 5 partnerships stress-tested within 2 years. All showing structural fragility. No stockpile, no fallback.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VI. PROPOSALS -->
+  <div class="card" id="proposals">
+    <div class="card-label">VI — De lege ferenda · July 2026 CRMA review</div>
+    <h2>What a hedged architecture looks like — three proposals</h2>
+    <p>The July 2026 mandatory CRMA review is the first real legislative window. African multi-alignment is not a threat to be managed — it is a negotiating reality to be met with substance. The South Africa CTIP is the proof of concept. The question for the review is whether it becomes the template or remains the exception.</p>
+    <div class="proposal">
+      <div class="proposal-num">Proposal 01</div>
+      <div class="proposal-title">Apply Article 5 concentration risk methodology formally to external partnerships</div>
+      <div class="proposal-text">Before any bilateral CRM agreement is signed, the Commission must publish a mandatory concentration risk assessment using the same criteria applied to domestic strategic materials. If the partnership deepens single-country exposure beyond 65%, it requires a compensating hedge instrument as a condition of proceeding. The legislation already contains the methodology. Apply it consistently — to China and to Africa equally. Inconsistent application of your own risk framework is not a policy. It is a liability.</div>
+    </div>
+    <div class="proposal">
+      <div class="proposal-num">Proposal 02</div>
+      <div class="proposal-title">Replace fragmented bilaterals with a single AU-EU Critical Minerals Framework Agreement with pre-negotiated fallback rights</div>
+      <div class="proposal-text">One multilateral instrument with all African partners simultaneously eliminates single-country political risk. Pre-negotiate access rights with second and third-tier producers — Morocco, Mozambique, Tanzania, Botswana — that activate if a primary bilateral fails. These cost almost nothing to negotiate in peacetime and cost everything after a supply shock. The EU's gas storage regulation mandates 80% fill levels by November each year — exactly this instrument applied to minerals produces a strategic stockpile obligation and a multilateral fallback. Note: the AU-level approach also resolves the AfCFTA compatibility problem that bilateral processing-linked tariff preferences create.</div>
+    </div>
+    <div class="proposal">
+      <div class="proposal-num">Proposal 03</div>
+      <div class="proposal-title">Mandate EIB first-loss co-investment in African processing infrastructure</div>
+      <div class="proposal-text">To receive EU strategic project status, African partnerships must demonstrate a minimum 25% of capital expenditure allocated to in-country processing, with the EIB holding a subordinated equity position — losing money before African partners do if the project underperforms. Shared downside is what aligns incentives. Political agreements do not. This is the skin-in-the-game mechanism that transforms a transactional supply relationship into a structurally stable industrial partnership — the difference between Nordstream and a genuine joint venture. The returns flow back to Europe. The manufacturing capability stays at source. Both sides win over the timescale that matters.</div>
+    </div>
+    <div class="sources">
+      <div class="sources-label">Sources</div>
+      <div class="source-links">
+        <a class="src-link" href="https://single-market-economy.ec.europa.eu/sectors/raw-materials/areas-specific-interest/raw-materials-diplomacy_en" target="_blank">EC — Raw materials diplomacy</a>
+        <a class="src-link" href="https://www.mining-technology.com/features/eu-backed-minerals-projects-in-africa-move-from-policy-to-proof/" target="_blank">Mining Technology — CRMA projects Africa</a>
+        <a class="src-link" href="https://miningindaba.com/articles/european-union-adds-13-new-critical-minerals" target="_blank">Mining Indaba — 13 new CRMA projects</a>
+        <a class="src-link" href="https://www.miningmagazine.com/europe/news-analysis/4524246/eu-spend-3b-2026-critical-raw-materials-supply" target="_blank">Mining Magazine — RESourceEU €3bn</a>
+        <a class="src-link" href="https://www.swp-berlin.org/publikation/strategic-raw-material-cooperation-between-africa-and-europe" target="_blank">SWP — Africa-Europe cooperation Feb 2026</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- VII. CONCLUSION -->
+  <div class="card" id="conclusion">
+    <div class="card-label">VII — Conclusion</div>
+    <h2>The window is open. It will not stay open.</h2>
+    <p>The CRMA is a sophisticated piece of supply chain law that applies rigorous risk thinking domestically and abandons it at the border. The African partnership architecture is not a diversification strategy — it is a dependency substitution, built without a hedge, in a domain where the underlying assets are politically capturable, physically irreplaceable, and have no liquid secondary market. That is a worse risk profile than anything a serious risk framework would tolerate.</p>
+    <p>Germany's experience is not a cautionary tale about Russia. It is a cautionary tale about what happens when stability assumptions substitute for hedge instruments — in any domain, with any counterparty. The DRC's February 2025 export ban is the first stress test. It will not be the last. Three of five African partnerships are already showing structural fragility within two years of signing.</p>
+    <p>The EU is not being asked to solve Africa's development problem. It is being offered first-mover access to the processing infrastructure of the next industrial era, at a discount that will not persist. The minerals are there. The demand is coming. The partnership model that works — equity co-investment, processing infrastructure at source, shared downside, multilateral architecture — is already proven in the South Africa CTIP. The only question is whether it becomes the template or the exception.</p>
+    <p>Germany's energy crisis was a failure of strategic imagination. This time the imagination failure would be voluntary. <em>If everyone loses, no one gains.</em></p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="fl">Julius Holzner &nbsp;·&nbsp; LLB International &amp; European Law, Rijksuniversiteit Groningen &nbsp;·&nbsp; Working paper, April 2026</div>
+  <div class="fr">Not for citation without permission</div>
+</footer>
+
+<script>
+const pdata=[
+  {name:"Namibia",date:"Nov 2022",type:"MoU + roadmap",promised:"€1bn Global Gateway, value addition, R&I cooperation, regulatory alignment",reality:"Roadmap endorsed Oct 2023. Namibia banned unprocessed mineral exports Jun 2023. Zandkopsdrift REE project nearby — 95% capex on processing not mining.",risk:"Namibia export ban signals intent to force processing onshore. Partnership may not deliver raw material access EU expects.",status:"Active — Frontier REE project in second CRMA application round"},
+  {name:"DRC",date:"Oct 2023",type:"MoU (non-binding)",promised:"Reliable long-term partner, win-win cooperation, value creation in DRC",reality:"DRC holds 75% global cobalt. Chinese firms own 18/26 cobalt assets. Export ban Feb 2025 extended twice. 2026 quota at 50% normal volumes.",risk:"Single-country concentration 75% — already breaches CRMA 65% cap. Export ban executed within 2 years of MoU. No enforcement mechanism.",status:"CRITICAL — export quota active, partnership under structural stress"},
+  {name:"Zambia",date:"Oct 2023",type:"MoU (non-binding)",promised:"Win-win cooperation, investment in copper/cobalt value chains, infrastructure support",reality:"China pledged $5bn at FOCAC 2024. UAE acquired Mopani Copper Mines. Saudi Arabia MoU Jan 2025. Zambia passed local sourcing law Jan 2026.",risk:"Three competing offers more capital-intensive than EU MoU. Local sourcing law reduces EU access without equity co-investment.",status:"At risk — multi-alignment actively diluting EU position"},
+  {name:"Rwanda",date:"Feb 2024",type:"MoU (non-binding)",promised:"Sustainable raw materials value chains, roadmap development",reality:"UN accusations Rwanda smuggling minerals from conflict-affected DRC. DRC parliamentary criticism of EU maintaining agreement.",risk:"Due diligence failure undermines EU ESG claims. Exposure under CSDDD. Politically compromised.",status:"Compromised — conflict-linked sourcing under active scrutiny"},
+  {name:"South Africa",date:"Nov 2025",type:"CTIP + MoU (first of kind)",promised:"€750m Global Gateway, industrial value chains, first EU endorsement of African processing",reality:"CTIP most advanced instrument. EU 50%+ of SA FDI, €45bn trade 2024. SA holds 89% global PGMs and 75% of PGM refining.",risk:"SA PGM concentration 89% already breaches 65% cap. CTIP model needs replication — currently isolated best practice.",status:"Most advanced — CTIP is the template for reform"}
+];
+function selP(i,el){
+  document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const d=pdata[i];
+  document.getElementById('pdetail').innerHTML='<h3>'+d.name+' — '+d.type+'</h3><div class="detail-grid"><div class="dcol"><div class="dlabel">What EU promised</div><div class="dval ok">'+d.promised+'</div></div><div class="dcol"><div class="dlabel">What actually exists</div><div class="dval">'+d.reality+'</div></div><div class="dcol"><div class="dlabel">Risk / gap</div><div class="dval bad">'+d.risk+'</div></div></div><div class="detail-status">Status: '+d.status+'</div>';
+}
+selP(0,document.querySelector('.pcard'));
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+function showRisk(id,btn){
+  document.querySelectorAll('.risk-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.risk-tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>

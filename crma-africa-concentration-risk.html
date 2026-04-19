@@ -1,0 +1,371 @@
+
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; }
+.wrap { padding: 1rem 0; font-family: var(--font-sans); }
+.section-label { font-size: 11px; letter-spacing: .06em; color: var(--color-text-tertiary); text-transform: uppercase; margin: 0 0 10px; }
+.tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab { padding: 5px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); font-size: 12px; cursor: pointer; color: var(--color-text-secondary); background: transparent; }
+.tab.on { background: var(--color-text-primary); color: var(--color-background-primary); border-color: transparent; }
+.panel { display: none; }
+.panel.on { display: block; }
+
+.pship-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-bottom: 16px; }
+.pcard { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 12px 14px; cursor: pointer; transition: border-color .15s; }
+.pcard:hover, .pcard.sel { border-color: var(--color-border-primary); }
+.pcard.sel { border-width: 1.5px; }
+.pcard .country { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+.pcard .date { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 6px; }
+.pcard .pill-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.pill { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; }
+.pill-mou { background: #E6F1FB; color: #185FA5; }
+.pill-ctip { background: #EAF3DE; color: #3B6D11; }
+.pill-sp { background: #EEEDFE; color: #534AB7; }
+.pill-risk { background: #FCEBEB; color: #A32D2D; }
+@media (prefers-color-scheme: dark) {
+  .pill-mou { background: #042C53; color: #85B7EB; }
+  .pill-ctip { background: #173404; color: #97C459; }
+  .pill-sp { background: #26215C; color: #AFA9EC; }
+  .pill-risk { background: #501313; color: #F09595; }
+}
+.detail { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 20px; min-height: 80px; }
+.detail h3 { font-size: 14px; font-weight: 500; margin: 0 0 8px; color: var(--color-text-primary); }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.dcol .dlabel { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 3px; }
+.dcol .dval { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+.dval.red { color: var(--color-text-danger); }
+.dval.green { color: var(--color-text-success); }
+
+.conc-section { margin-top: 4px; }
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bar-label { font-size: 12px; color: var(--color-text-secondary); width: 160px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 8px; background: var(--color-border-tertiary); border-radius: 4px; position: relative; }
+.bar-fill { height: 100%; border-radius: 4px; }
+.bar-fill.over { background: #E24B4A; }
+.bar-fill.warn { background: #EF9F27; }
+.bar-fill.ok { background: #639922; }
+.bar-cap { position: absolute; top: -2px; height: 12px; width: 2px; background: var(--color-text-danger); border-radius: 1px; }
+.bar-pct { font-size: 11px; color: var(--color-text-tertiary); width: 36px; text-align: right; }
+.cap-label { font-size: 10px; color: var(--color-text-danger); }
+
+.lit-grid { display: grid; gap: 8px; }
+.lcard { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 12px 14px; }
+.lcard .ltop { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+.lcard .ltitle { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.lcard .lyear { font-size: 11px; color: var(--color-text-tertiary); white-space: nowrap; }
+.lcard .lfind { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+.lcard .ltags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+
+.gap-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+.gap-table th { text-align: left; padding: 6px 8px; font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); border-bottom: 0.5px solid var(--color-border-tertiary); }
+.gap-table td { padding: 7px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); vertical-align: top; }
+.gap-table tr:last-child td { border-bottom: none; }
+.gap-table .says { color: var(--color-text-success); }
+.gap-table .does { color: var(--color-text-danger); }
+</style>
+
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab on" onclick="show('partnerships',this)">EU-Africa partnerships</button>
+    <button class="tab" onclick="show('concentration',this)">Concentration vs CRMA cap</button>
+    <button class="tab" onclick="show('literature',this)">What 30 papers say</button>
+    <button class="tab" onclick="show('gap',this)">Promise vs reality gap</button>
+  </div>
+
+  <div id="partnerships" class="panel on">
+    <div class="section-label">5 African partnership agreements — click to expand</div>
+    <div class="pship-grid">
+      <div class="pcard sel" onclick="selectP(0,this)">
+        <div class="country">Namibia</div>
+        <div class="date">Nov 2022</div>
+        <div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-sp">Strategic project</span></div>
+      </div>
+      <div class="pcard" onclick="selectP(1,this)">
+        <div class="country">DRC</div>
+        <div class="date">Oct 2023</div>
+        <div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-risk">Export ban 2025</span></div>
+      </div>
+      <div class="pcard" onclick="selectP(2,this)">
+        <div class="country">Zambia</div>
+        <div class="date">Oct 2023</div>
+        <div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-risk">Local sourcing law</span></div>
+      </div>
+      <div class="pcard" onclick="selectP(3,this)">
+        <div class="country">Rwanda</div>
+        <div class="date">Feb 2024</div>
+        <div class="pill-row"><span class="pill pill-mou">MoU</span><span class="pill pill-risk">DRC conflict link</span></div>
+      </div>
+      <div class="pcard" onclick="selectP(4,this)">
+        <div class="country">South Africa</div>
+        <div class="date">Nov 2025</div>
+        <div class="pill-row"><span class="pill pill-ctip">CTIP</span><span class="pill pill-sp">€750m GG</span></div>
+      </div>
+    </div>
+    <div class="detail" id="pdetail"></div>
+    <div class="section-label" style="margin-top:8px">Key data points across all 5 partnerships</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:4px">
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">Legally binding?</div>
+        <div style="font-size:20px;font-weight:500;color:var(--color-text-danger)">4 of 5</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary)">are non-binding MoUs</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">Processing commits</div>
+        <div style="font-size:20px;font-weight:500;color:var(--color-text-danger)">0</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary)">enforceable in-Africa</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">African strategic projects</div>
+        <div style="font-size:20px;font-weight:500;color:var(--color-text-primary)">4</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary)">of 60 total globally</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">Counter-offers active</div>
+        <div style="font-size:20px;font-weight:500;color:var(--color-text-warning)">3+</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary)">China, Gulf, US in same markets</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="concentration" class="panel">
+    <div class="section-label">Actual EU supply concentration vs CRMA 65% single-country cap</div>
+    <div class="conc-section" style="margin-bottom:16px">
+      <div class="bar-row">
+        <div class="bar-label">Cobalt (DRC)</div>
+        <div class="bar-track">
+          <div class="bar-fill over" style="width:75%"></div>
+          <div class="bar-cap" style="left:65%"></div>
+        </div>
+        <div class="bar-pct">75%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Cobalt — refined (China)</div>
+        <div class="bar-track">
+          <div class="bar-fill over" style="width:78%"></div>
+          <div class="bar-cap" style="left:65%"></div>
+        </div>
+        <div class="bar-pct">78%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Manganese (S. Africa)</div>
+        <div class="bar-track">
+          <div class="bar-fill warn" style="width:55%"></div>
+          <div class="bar-cap" style="left:65%"></div>
+        </div>
+        <div class="bar-pct">55%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">PGMs (S. Africa)</div>
+        <div class="bar-track">
+          <div class="bar-fill over" style="width:89%"></div>
+          <div class="bar-cap" style="left:65%"></div>
+        </div>
+        <div class="bar-pct">89%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">REE magnets (China)</div>
+        <div class="bar-track">
+          <div class="bar-fill over" style="width:94%"></div>
+          <div class="bar-cap" style="left:65%"></div>
+        </div>
+        <div class="bar-pct">94%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Phosphoric acid (China)</div>
+        <div class="bar-track">
+          <div class="bar-fill over" style="width:75%"></div>
+          <div class="bar-cap" style="left:65%"></div>
+        </div>
+        <div class="bar-pct">75%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Copper mined (DRC)</div>
+        <div class="bar-track">
+          <div class="bar-fill warn" style="width:47%"></div>
+          <div class="bar-cap" style="left:65%"></div>
+        </div>
+        <div class="bar-pct">47%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;font-size:11px;color:var(--color-text-tertiary)">
+        <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;display:inline-block"></span>Exceeds 65% CRMA cap</span>
+        <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#EF9F27;display:inline-block"></span>Approaching cap</span>
+        <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:2px;height:12px;background:#E24B4A;display:inline-block"></span>65% CRMA limit</span>
+      </div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px 16px;font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+      The CRMA's own Article benchmark prohibits more than 65% reliance on any single country for any strategic raw material. Of the 7 key minerals above, 5 already breach this threshold at the mining or refining stage. The EU's African partnerships deepen concentration in DRC and South Africa — the same minerals, the same countries, with no multilateral backstop if either counterparty restricts exports. The DRC exercised exactly this leverage in February 2025 with a cobalt export ban, extended twice. The architecture failed its own stress test before it was fully built.
+    </div>
+  </div>
+
+  <div id="literature" class="panel">
+    <div class="section-label">30 papers — what the literature actually argues</div>
+    <div class="lit-grid">
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">SWP Berlin — EU-Zambia partnership analysis</div><div class="lyear">May 2025</div></div>
+        <div class="lfind">14 raw material partnerships forged; Zambia MoU legally non-binding. China and Gulf states acting faster with direct capital. EU losing ground on speed and scale.</div>
+        <div class="ltags"><span class="pill pill-risk">Speed gap</span><span class="pill pill-mou">Non-binding</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">SWP Berlin — EU external CRM strategy</div><div class="lyear">Feb 2026</div></div>
+        <div class="lfind">EU diplomatic footprint expanded but project pipeline limited and financing fragmented. African partners expect industrial co-investment, not political frameworks.</div>
+        <div class="ltags"><span class="pill pill-risk">Financing gap</span><span class="pill pill-risk">Credibility gap</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">Oxford Energy — EU cobalt supply security</div><div class="lyear">Feb 2025</div></div>
+        <div class="lfind">DRC cobalt share 75% of global output. EU needs 15x more cobalt by 2050. MoUs are soft-power tools with no legal guarantees. EU-DRC partnership insufficient without binding offtake.</div>
+        <div class="ltags"><span class="pill pill-risk">75% DRC dependency</span><span class="pill pill-mou">No legal guarantee</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">IEA — Global Critical Minerals Outlook 2025</div><div class="lyear">2025</div></div>
+        <div class="lfind">China leads refining for 19/20 strategic minerals at 70% avg. Copper 30% supply shortfall by 2035. Export restrictions proliferating. Mining concentration rising not falling.</div>
+        <div class="ltags"><span class="pill pill-risk">19/20 minerals</span><span class="pill pill-risk">70% China refining</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">ODI — Critical minerals geopolitics 2026</div><div class="lyear">Jan 2026</div></div>
+        <div class="lfind">60 strategic projects selected, only 13 external, few African. RESourceEU €3bn far below $500-600bn sector need. Policy frameworks multiplying but investment lagging.</div>
+        <div class="ltags"><span class="pill pill-risk">Investment lag</span><span class="pill pill-sp">Only 4 Africa SPs</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">ScienceDirect — EU energy transition diplomacy</div><div class="lyear">Jul 2025</div></div>
+        <div class="lfind">EU partnerships risk reinforcing Africa as raw material supplier without value addition. Unequal exchange pattern replicates colonial dependency dynamics.</div>
+        <div class="ltags"><span class="pill pill-risk">Extractive pattern</span><span class="pill pill-risk">No value addition</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">AfriPoli — CRMA/CMS African benefit analysis</div><div class="lyear">Sep 2024</div></div>
+        <div class="lfind">CRMA constraints on offshore processing contradict value addition promises. No real capital investment or processing relocation to Africa. Global Gateway skepticism widespread.</div>
+        <div class="ltags"><span class="pill pill-risk">Contradiction</span><span class="pill pill-risk">No processing commit</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">African Business — Luanda Summit analysis</div><div class="lyear">Nov 2025</div></div>
+        <div class="lfind">First-ever EU endorsement of African mineral processing at Luanda. Multi-alignment strategy: Africa works with China, Gulf, India, Russia simultaneously for leverage.</div>
+        <div class="ltags"><span class="pill pill-ctip">Processing shift</span><span class="pill pill-risk">Multi-alignment</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">SAIIA — SA-EU strategic interdependence</div><div class="lyear">Dec 2025</div></div>
+        <div class="lfind">EU-SA CTIP first of its kind combining competitiveness and climate. EU 50%+ of SA FDI. Neither party politicising critical minerals vs US-China competition.</div>
+        <div class="ltags"><span class="pill pill-ctip">CTIP model</span><span class="pill pill-sp">Strategic alignment</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">Fastmarkets — DRC cobalt export quota</div><div class="lyear">Oct 2025</div></div>
+        <div class="lfind">DRC export ban Feb 2025, extended twice, quota set at 50% of normal monthly volumes for 2026. DRC mining minister: "colonial-era pit to port model must end."</div>
+        <div class="ltags"><span class="pill pill-risk">Export ban executed</span><span class="pill pill-risk">50% quota cut</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">Mining Technology — EU-backed Africa projects</div><div class="lyear">Feb 2026</div></div>
+        <div class="lfind">Second CRMA application round closed Jan 2026. Zandkopsdrift (SA): 95% capex on processing not mining. Kobaloni cobalt refinery (Zambia): capital raise still pending FID.</div>
+        <div class="ltags"><span class="pill pill-sp">Processing focus</span><span class="pill pill-risk">Capital gap</span></div>
+      </div>
+      <div class="lcard">
+        <div class="ltop"><div class="ltitle">Who Owns Africa — mining ownership analysis</div><div class="lyear">Jan 2026</div></div>
+        <div class="lfind">Chinese firms hold stakes in 18/26 DRC cobalt assets and 80% of African lithium mines. African states could capture $2.5tr additional value by 2050 through processing.</div>
+        <div class="ltags"><span class="pill pill-risk">China dominates</span><span class="pill pill-ctip">$2.5tr opportunity</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="gap" class="panel">
+    <div class="section-label">The promise vs reality gap — CRMA stated goals vs actual architecture</div>
+    <table class="gap-table">
+      <tr>
+        <th style="width:30%">CRMA / EU stated goal</th>
+        <th style="width:35%">What EU actually built</th>
+        <th style="width:35%">Gap / risk created</th>
+      </tr>
+      <tr>
+        <td class="says">No single country &gt;65% of any SRM</td>
+        <td class="does">DRC 75% cobalt, China 78% refined cobalt, SA 89% PGMs — all breach cap</td>
+        <td>CRMA's own benchmark violated at current baseline. Partnerships deepen not diversify these concentrations.</td>
+      </tr>
+      <tr>
+        <td class="says">Mutually beneficial partnerships supporting African development</td>
+        <td class="does">4 of 5 African instruments are non-binding MoUs. Zero enforceable processing commitments in Africa.</td>
+        <td>No legal mechanism to enforce value addition. African states rationally pursue multi-alignment instead.</td>
+      </tr>
+      <tr>
+        <td class="says">Supply chain resilience through diversification</td>
+        <td class="does">All African partnerships concentrate in same 3–4 countries for same minerals. No multilateral AU-level framework.</td>
+        <td>Bilateral concentration = same single-point failure risk the CRMA was designed to prevent, relocated from China to Africa.</td>
+      </tr>
+      <tr>
+        <td class="says">Strategic projects driving processing capacity</td>
+        <td class="does">4 African strategic projects of 60 total. Kobaloni refinery (Zambia) still raising capital as of Q1 2026.</td>
+        <td>Processing pipeline insufficient. African refining share of global cobalt: 3%. EU deepening extraction dependency.</td>
+      </tr>
+      <tr>
+        <td class="says">€3bn RESourceEU / €400bn Global Gateway mobilised</td>
+        <td class="does">Actual new EU funds minimal. Global Gateway largely repackaged loans. €60.5bn Sub-Saharan Africa competes with migration, humanitarian, other priorities.</td>
+        <td>Capital volume orders of magnitude below sector need ($500–600bn globally to 2040 per IEA). No ring-fencing for CRM.</td>
+      </tr>
+      <tr>
+        <td class="says">No hedge required — stable partner relationships</td>
+        <td class="does">DRC imposed export ban Feb 2025 (extended twice). Zambia passed local sourcing legislation Jan 2026. Rwanda partnership compromised by DRC conflict link.</td>
+        <td>Three of five African partnerships already stress-tested and showing structural fragility. No stockpile, no fallback, no enforcement.</td>
+      </tr>
+    </table>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+      The gap table is the paper's indictment in six rows. Every entry is sourced from primary documents — the CRMA text, the partnership agreement press releases, the IEA Outlook, and the Fastmarkets/SWP field reporting. The EU has not built a diversification strategy. It has built a dependency substitution — with its own legislation as the proof.
+    </div>
+  </div>
+</div>
+
+<script>
+const pdata = [
+  {
+    name: "Namibia", date: "Nov 2022", type: "MoU + roadmap",
+    promised: "€1bn Global Gateway investment, value addition, R&I cooperation, regulatory alignment",
+    reality: "Roadmap endorsed Oct 2023. Namibia then banned unprocessed mineral exports Jun 2023. Zandkopsdrift REE project (SA) most advanced nearby project — 95% capex on processing.",
+    risk: "Namibia export ban signals intent to force processing onshore, not export raw materials to EU. Partnership may not deliver raw material access EU expects.",
+    status: "Active — Frontier REE project in pipeline"
+  },
+  {
+    name: "DRC", date: "Oct 2023", type: "MoU (non-binding)",
+    promised: "Reliable long-term partner, win-win cooperation, value creation in DRC",
+    reality: "DRC holds 75% global cobalt. Chinese firms own stakes in 18/26 cobalt assets. DRC imposed export ban Feb 2025, extended twice. Quota for 2026 set at 50% of normal volumes.",
+    risk: "Single-country concentration 75% — already breaches CRMA 65% cap. Export ban executed within 2 years of MoU. No enforcement mechanism, no stockpile buffer.",
+    status: "CRITICAL — export quota active, partnership under stress"
+  },
+  {
+    name: "Zambia", date: "Oct 2023", type: "MoU (non-binding)",
+    promised: "Win-win cooperation, investment in copper/cobalt value chains, infrastructure support",
+    reality: "China pledged $5bn at FOCAC 2024. UAE acquired Mopani Copper Mines. Saudi Arabia signed MoU Jan 2025. Zambia passed local sourcing legislation Jan 2026 (20% rising to 40%).",
+    risk: "Three competing offers from China, Gulf, Saudi Arabia all more capital-intensive than EU MoU. Local sourcing law reduces EU access to Zambian inputs without equity co-investment.",
+    status: "At risk — multi-alignment actively diluting EU position"
+  },
+  {
+    name: "Rwanda", date: "Feb 2024", type: "MoU (non-binding)",
+    promised: "Sustainable raw materials value chains, roadmap development",
+    reality: "UN accusations that Rwanda smuggling minerals from conflict-affected DRC. Partnership politically compromised. DRC parliamentary criticism of EU maintaining Rwanda agreement.",
+    risk: "Due diligence failure. EU traceability and ESG claims undercut by sourcing from conflict zone via Rwanda. Reputational and legal exposure under CSDDD.",
+    status: "Compromised — conflict-linked sourcing under scrutiny"
+  },
+  {
+    name: "South Africa", date: "Nov 2025", type: "CTIP + MoU (first of kind)",
+    promised: "€750m Global Gateway, renewable energy, jobs, industrial value chains, first EU endorsement of African processing",
+    reality: "CTIP is most advanced instrument — combines competitiveness and climate. EU already 50%+ of SA FDI, €45bn trade 2024. SA holds 89% of global PGMs, 75% of global PGM refining.",
+    risk: "Most credible partnership but still early stage. SA PGM concentration 89% already breaches 65% cap. CTIP model needs replication across all African partnerships to reduce fragility.",
+    status: "Most advanced — CTIP model is the template"
+  }
+];
+
+function selectP(i, el) {
+  document.querySelectorAll('.pcard').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  const d = pdata[i];
+  document.getElementById('pdetail').innerHTML = `
+    <h3>${d.name} — ${d.type}</h3>
+    <div class="detail-grid">
+      <div class="dcol"><div class="dlabel">What EU promised</div><div class="dval green">${d.promised}</div></div>
+      <div class="dcol"><div class="dlabel">What actually exists</div><div class="dval">${d.reality}</div></div>
+      <div class="dcol"><div class="dlabel">Risk / gap</div><div class="dval red">${d.risk}</div></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary)">Status: ${d.status}</div>`;
+}
+selectP(0, document.querySelector('.pcard'));
+
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
